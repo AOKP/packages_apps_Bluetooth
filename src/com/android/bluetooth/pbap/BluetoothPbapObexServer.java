@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import javax.obex.ServerRequestHandler;
 import javax.obex.ResponseCodes;
@@ -647,6 +648,17 @@ public class BluetoothPbapObexServer extends ServerRequestHandler {
         } else {
             if (searchValue != null) {
                 compareValue = searchValue.trim();
+            }
+            if (mOrderBy == ORDER_BY_ALPHABETICAL) {
+                Collections.sort(nameList, String.CASE_INSENSITIVE_ORDER);
+                String s = BluetoothPbapService.getLocalPhoneName();
+                if (s != null) {
+                    int idx = nameList.indexOf(s);
+                    if (idx > 0) {
+                        nameList.remove(idx);
+                        nameList.add(0, s);
+                    }
+                }
             }
             for (int pos = listStartOffset; pos < listSize &&
                     itemsFound < requestSize; pos++) {
