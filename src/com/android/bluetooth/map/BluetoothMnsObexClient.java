@@ -169,8 +169,6 @@ public class BluetoothMnsObexClient {
             }
             mHandler = null;
         }
-        if(D) Log.d(TAG, "BluetoothMnsObexClient: exiting from disconnect");
-        releaseMnsLock();
 
         /* Disconnect if connected */
         disconnect();
@@ -183,6 +181,8 @@ public class BluetoothMnsObexClient {
             mObserver.deinit();
             mObserver = null;
         }
+        if(D) Log.d(TAG, "BluetoothMnsObexClient: exiting from disconnect");
+        releaseMnsLock();
     }
 
     private HeaderSet hsConnect = null;

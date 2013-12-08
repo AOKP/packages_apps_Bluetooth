@@ -123,7 +123,6 @@ final class Avrcp {
     private static final int MESSAGE_FAST_FORWARD = 10;
     private static final int MESSAGE_REWIND = 11;
     private static final int MESSAGE_CHANGE_PLAY_POS = 12;
-    private static final int MESSAGE_FF_REW_TIMEOUT = 13;
     private int mAddressedPlayerChangedNT;
     private int mAvailablePlayersChangedNT;
     private int mAddressedPlayerId;
