@@ -45,6 +45,8 @@ import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.PhoneLookup;
+import android.provider.ContactsContract.Preferences;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import java.util.Collections;
