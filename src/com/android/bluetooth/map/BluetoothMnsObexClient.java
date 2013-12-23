@@ -119,7 +119,9 @@ public class BluetoothMnsObexClient {
      * Disconnect the connection to MNS server.
      * Call this when the MAS client requests a de-registration on events.
      */
-    public void disconnect() {
+    public synchronized void disconnect() {
+        if(D) Log.d(TAG, "BluetoothMnsObexClient: disconnect");
+        acquireMnsLock();
         try {
             if (mClientSession != null) {
                 mClientSession.disconnect(null);
@@ -167,8 +169,6 @@ public class BluetoothMnsObexClient {
             }
             mHandler = null;
         }
-        if(D) Log.d(TAG, "BluetoothMnsObexClient: exiting from disconnect");
-        releaseMnsLock();
 
         /* Disconnect if connected */
         disconnect();
@@ -181,6 +181,8 @@ public class BluetoothMnsObexClient {
             mObserver.deinit();
             mObserver = null;
         }
+        if(D) Log.d(TAG, "BluetoothMnsObexClient: exiting from disconnect");
+        releaseMnsLock();
     }
 
     private HeaderSet hsConnect = null;
@@ -195,8 +197,6 @@ public class BluetoothMnsObexClient {
         }
 
         if(notificationStatus == BluetoothMapAppParams.NOTIFICATION_STATUS_NO) {
-            Log.d(TAG, "handleRegistration: disconnect");
-            disconnect();
             // Unregister - should we disconnect, or keep the connection? - the spec. says nothing about this.
             if(mObserverRegistered == true) {
                 mObserver.unregisterObserver();

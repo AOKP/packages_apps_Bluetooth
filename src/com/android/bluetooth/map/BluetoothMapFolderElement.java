@@ -87,7 +87,7 @@ public class BluetoothMapFolderElement {
      */
     public BluetoothMapFolderElement getSubFolder(String folderName){
         for(BluetoothMapFolderElement subFolder : subFolders){
-            if(subFolder.getName().equalsIgnoreCase(folderName))
+            if(subFolder.getName().equals(folderName))
                 return subFolder;
         }
         return null;

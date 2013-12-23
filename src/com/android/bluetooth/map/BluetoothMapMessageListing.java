@@ -52,7 +52,6 @@ public class BluetoothMapMessageListing {
         {
             return list.size();
         }
-        Log.e(TAG, "list is null returning 0");
         return 0;
     }
 
@@ -74,7 +73,6 @@ public class BluetoothMapMessageListing {
      *             if UTF-8 encoding is unsupported on the platform.
      */
     public byte[] encode() throws UnsupportedEncodingException {
-        Log.d(TAG, "encoding to UTF-8 format");
         StringWriter sw = new StringWriter();
         XmlSerializer xmlMsgElement = Xml.newSerializer();
         try {
@@ -83,10 +81,8 @@ public class BluetoothMapMessageListing {
             xmlMsgElement.startTag("", "MAP-msg-listing");
             xmlMsgElement.attribute("", "version", "1.0");
             // Do the XML encoding of list
-            if(list != null) {
-               for (BluetoothMapMessageListingElement element : list) {
-                   element.encode(xmlMsgElement); // Append the list element
-               }
+            for (BluetoothMapMessageListingElement element : list) {
+                element.encode(xmlMsgElement); // Append the list element
             }
             xmlMsgElement.endTag("", "MAP-msg-listing");
             xmlMsgElement.endDocument();
@@ -109,12 +105,7 @@ public class BluetoothMapMessageListing {
         if (offset + count <= list.size()) {
             list = list.subList(offset, offset + count);
         } else {
-            if(offset > count) {
-               list = null;
-               Log.d(TAG, "offset greater than list size. Returning null");
-            }
-            else
-               list = list.subList(offset, count);
+            list = null;
         }
     }
 }

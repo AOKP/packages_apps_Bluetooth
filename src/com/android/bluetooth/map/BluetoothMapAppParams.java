@@ -209,10 +209,10 @@ public class BluetoothMapAppParams {
                 setFilterReadStatus(appParams[i] & 0x03); // Lower two bits
                 break;
             case FILTER_RECIPIENT:
-                setFilterRecipient(new String(appParams, i, tagLength - 1));
+                setFilterRecipient(new String(appParams, i, tagLength));
                 break;
             case FILTER_ORIGINATOR:
-                setFilterOriginator(new String(appParams, i, tagLength - 1));
+                setFilterOriginator(new String(appParams, i, tagLength));
                 break;
             case FILTER_PRIORITY:
                 if (tagLength != FILTER_PRIORITY_LEN) {
