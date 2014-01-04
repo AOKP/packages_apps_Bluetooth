@@ -58,6 +58,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.speech.RecognizerIntent;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import com.android.bluetooth.Utils;
@@ -266,7 +267,7 @@ final class HeadsetStateMachine extends StateMachine {
         mAudioOn = new AudioOn();
 
         if (sVoiceCommandIntent == null) {
-            sVoiceCommandIntent = new Intent(Intent.ACTION_VOICE_COMMAND);
+            sVoiceCommandIntent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
             sVoiceCommandIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         if (context.getPackageManager().resolveActivity(sVoiceCommandIntent,0) != null
