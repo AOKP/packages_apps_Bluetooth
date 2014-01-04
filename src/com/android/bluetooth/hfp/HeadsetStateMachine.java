@@ -57,7 +57,9 @@ import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.PowerManager;
+import android.os.UserHandle;
 import android.os.PowerManager.WakeLock;
+import android.speech.RecognizerIntent;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import com.android.bluetooth.Utils;
@@ -168,6 +170,7 @@ final class HeadsetStateMachine extends StateMachine {
     private boolean mVoiceRecognitionStarted = false;
     private boolean mWaitingForVoiceRecognition = false;
     private WakeLock mStartVoiceRecognitionWakeLock;  // held while waiting for voice recognition
+    private WakeLock mWakeDeviceLock;
 
     private boolean mDialingOut = false;
     private AudioManager mAudioManager;
@@ -240,6 +243,8 @@ final class HeadsetStateMachine extends StateMachine {
         mStartVoiceRecognitionWakeLock = mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
                                                        TAG + ":VoiceRecognition");
         mStartVoiceRecognitionWakeLock.setReferenceCounted(false);
+        mWakeDeviceLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+        
 
         mDialingOut = false;
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -266,7 +271,7 @@ final class HeadsetStateMachine extends StateMachine {
         mAudioOn = new AudioOn();
 
         if (sVoiceCommandIntent == null) {
-            sVoiceCommandIntent = new Intent(Intent.ACTION_VOICE_COMMAND);
+            sVoiceCommandIntent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
             sVoiceCommandIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         if (context.getPackageManager().resolveActivity(sVoiceCommandIntent,0) != null
@@ -1263,7 +1268,12 @@ final class HeadsetStateMachine extends StateMachine {
                 !isInCall())
             {
                 try {
+                    mWakeDeviceLock.acquire();
+                    Intent u = new Intent();
+                    u.setAction("com.android.lockscreen.ACTION_UNLOCK_RECEIVER");
+                    mService.sendBroadcastAsUser(u, UserHandle.ALL);
                     mService.startActivity(sVoiceCommandIntent);
+                    mWakeDeviceLock.release();
                 } catch (ActivityNotFoundException e) {
                     atResponseCodeNative(HeadsetHalConstants.AT_RESPONSE_ERROR, 0);
                     return;
