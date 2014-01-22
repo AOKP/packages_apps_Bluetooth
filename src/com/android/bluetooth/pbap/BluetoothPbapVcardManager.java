@@ -329,10 +329,11 @@ public class BluetoothPbapVcardManager {
                 for (contactCursor.moveToFirst(); !contactCursor.isAfterLast(); contactCursor
                         .moveToNext()) {
                     String name = contactCursor.getString(CONTACTS_NAME_COLUMN_INDEX);
+                    long id = contactCursor.getLong(CONTACTS_ID_COLUMN_INDEX);
                     if (TextUtils.isEmpty(name)) {
                         name = mContext.getString(android.R.string.unknownName);
                     }
-                    nameList.add(name);
+                    nameList.add(name + "," + id);
                 }
             }
         } finally {
